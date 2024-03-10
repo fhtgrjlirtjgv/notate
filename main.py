@@ -17,6 +17,7 @@ class Widget(QMainWindow):
         self.ui.delet_notate.clicked.connect(self.delete_note)
         self.ui.addtonotate.clicked.connect(self.add_tag)
         self.ui.destroy_note.clicked.connect(self.del_teg)
+        self.ui.search_teg.clicked.connect(self.search_by_tag)
 
     def show_note(self):
         self.name = self.ui.notate_bibliot.selectedItems()[0].text()
@@ -85,6 +86,16 @@ class Widget(QMainWindow):
                 self.ui.biblio_teg.clear()
                 self.ui.biblio_teg.addItems(self.notes[self.name]["теги"])
 
+    def search_by_tag(self):
+
+        tag = self.ui.teg.toPlainText()
+        if tag:
+            text_Edit_big = []
+            for note_name in self.notes:
+                if tag in self.notes[note_name]["теги"]:
+                    text_Edit_big.append(note_name)
+            self.ui.notate_bibliot.clear()
+            self.ui.notate_bibliot.addItems(text_Edit_big)
 
 
 app = QApplication([])
