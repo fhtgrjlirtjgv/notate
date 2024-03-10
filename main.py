@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMainWindow
 from ui import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication
 
+
 class Widget(QMainWindow):
     def   __init__(self):
         super().__init__()
@@ -14,8 +15,8 @@ class Widget(QMainWindow):
         self.ui.save_notate.clicked.connect(self.save_note)
         self.ui.create_notate.clicked.connect(self.create_notate)
         self.ui.delet_notate.clicked.connect(self.delete_note)
-
-
+        self.ui.addtonotate.clicked.connect(self.add_tag)
+        self.ui.destroy_note.clicked.connect(self.del_teg)
 
     def show_note(self):
         self.name = self.ui.notate_bibliot.selectedItems()[0].text()
@@ -23,6 +24,10 @@ class Widget(QMainWindow):
         self.ui.text_Edit_big.setText(self.notes[self.name]["текст"])
 
     def save_note(self):
+        tags = []
+        for i in range(self.ui.biblio_teg.count()):
+            tags.append(self.ui.biblio_teg.item(i).text())
+
         self.notes[self.ui.line_ss.text()] = {
                 "текст":self.ui.text_Edit_big.toPlainText(),
                 "теги": []
@@ -62,6 +67,25 @@ class Widget(QMainWindow):
             self.save_note()
         except:
             print("помилка видалення")
+
+    def add_tag(self):
+        tag_name = self.ui.teg.toPlainText()
+        if tag_name!="":
+            if tag_name not in self.notes[self.name]["теги"]:
+                self.notes[self.name]["теги"].append(tag_name)
+                self.ui.biblio_teg.clear()
+                self.ui.biblio_teg.addItems(self.notes[self.name]["теги"])
+
+
+    def del_teg(self):
+        if self.ui.biblio_teg.selectedItems():
+            tag_name = self.ui.biblio_teg.selectedItems()[0].text()
+            if tag_name in self.notes[self.name]["теги"]:
+                self.notes[self.name]["теги"].remove(tag_name) 
+                self.ui.biblio_teg.clear()
+                self.ui.biblio_teg.addItems(self.notes[self.name]["теги"])
+
+
 
 app = QApplication([])
 ex = Widget()
